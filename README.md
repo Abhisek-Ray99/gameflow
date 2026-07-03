@@ -1,97 +1,134 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# PlayShifu Children's Onboarding Companion App Flow
 
-# Getting Started
+This React Native project implements a responsive, localized, and highly polished onboarding flow plus a premium home dashboard screen. It is built strictly using React Native CLI (React Native 0.86), React Navigation (Native Stack), and TypeScript.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 🚀 Application Flow & Screen Maps
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+The onboarding wizard runs through the following sequence:
 
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+[Screen 1: Language Selection]
+             │
+             ▼ (Confirm Selection)
+[Screen 2: Welcome Splash]
+             ├── (Yes, I have my toy!) ───────> [Screen 3: Plush Selection Grid] ──┐
+             │                                                                      ▼
+             └── (No, I don't have one yet!) ──> [Screen 4: Benefit/Comparison] ─────┼──> [Screen 5: Parental Gate]
+                                                                                      │            │
+                                                                    (Success) ────────┘            ▼ (Cancel)
+                                                                                          [Return to Caller Screen]
+                                                                                                   │
+                                                                                                   ▼ (Success)
+                                                                                         [Screen 6: Landing Home]
 ```
 
-## Step 2: Build and run your app
+### 1. Language Selection (Screen 1)
+- Left-aligned kid-friendly headers set in **DynaPuff-Bold**.
+- Offers **English** and **Polski** selection options.
+- Selection cards feature the radio indicator shifted to the left, labels set in **DynaPuff-Bold** with size **24**, and no emoji flags.
+- Confirm button triggers the navigation.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### 2. Welcome Splash (Screen 2)
+- Greets the child and asks if they have a physical toy.
+- Features a large illustration (`Img1.png` at height `460` in portrait) and a 3D square back button.
+- Contains two primary 3D CTAs:
+  - `"Yes, I have my toy!"` → navigates to **Plush Selection**
+  - `"No, I don't have one yet!"` → navigates to **Comparison/Benefits**
 
-### Android
+### 3. Comparison/Benefits (Screen 3)
+- Showcases the benefits of having a physical buddy (interactive stories, bedtime lullabies, tactile coordination) in a premium, translucent table.
+- Dual 3D CTAs:
+  - `"Get the Plush"` → links to external store
+  - `"Continue with App Only"` → navigates to **Parental Lock**
 
+### 4. Plush Selection (Screen 4)
+- Displays ZeeZee and Guffy card options.
+- **Dynamic Zooming (Portrait):** Applies a scale zoom level transform only in portrait mode (`1.3` for ZeeZee and `1.1` for Guffy) to display the characters with maximum visual depth. Zoom transforms are disabled in landscape mode.
+- Selection cards are styled on a solid purple background (`#5A4FC4`) with a thick white border highlight upon selection.
+
+### 5. Parental Gate (Screen 5)
+- Displays a mathematical equation challenge (`a X (b + c)`) styled in yellow using large **DynaPuff-Bold** font.
+- Features a center-aligned text input box where parents type the answer (cursor is centered dynamically by resetting native EditText padding rules).
+- Once solved successfully, registers the state and routes to **Landing Home**.
+
+### 6. Landing Home (Screen 6)
+- Renders the child's home dashboard with active plush details or localised demo mode features.
+
+---
+
+## 🎨 Theme & Typography
+
+1. **Custom Font Assets**:
+   - **`DynaPuff-Bold`**: Bubble-style Google font used for all titles, headers, Parental Lock equations, and button labels.
+   - **`Feather`** icon pack: Used to draw navigation arrows.
+   - Restructured native resources to bundle only active fonts.
+
+2. **3D Button Design (`react-native-awesome-button`)**:
+   - Primary and secondary buttons animate with tactile 3D depress shadows on click.
+   - Support customizable dimensions, rounded corners, and stretching configurations (`borderRadius`, `width`, `height`, `stretch`) in `Button.Root`.
+
+3. **3D Square Back Buttons**:
+   - Replaced flat text links with a solid 3D square `AwesomeButton` (`width={54}`, `height={54}`, `borderRadius={12}`, `stretch={false}`) containing only a Feather `chevron-left` vector icon.
+
+---
+
+## 🛠️ Verification & Validation
+
+The codebase has been checked for correct syntax, TypeScript validation, styling guidelines, and lint rules.
+
+- **TypeScript type checking**: `npx tsc --noEmit` passes successfully.
+- **Lint checks**: `npm run lint` passes successfully with **0 errors and 0 warnings**.
+
+## 💻 Getting Started (React Native CLI)
+
+Follow these step-by-step instructions to set up, build, and run the project from scratch:
+
+### 📋 Prerequisites
+Ensure you have the standard React Native development environment configured for Android (Android SDK, Android Studio Emulator).
+
+---
+
+### 🛠️ Setup & Installation
+
+#### Step 1: Install Dependencies
+Clone the repository and install all package dependencies:
 ```sh
-# Using npm
+npm install
+```
+
+#### Step 2: Set Up and Link Font Assets
+Ensure the DynaPuff-Bold and Feather vector icon assets are linked natively:
+```sh
+npx react-native-asset
+```
+
+---
+
+### 🚀 Running the App
+
+#### Step 1: Start the Metro Bundler
+Start the Metro server with a clean cache to make sure the font assets are correctly resolved:
+```sh
+npm start -- --reset-cache
+```
+
+#### Step 2: Launch the App on Emulator
+Open a new terminal window and boot the application:
+```sh
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+### 📦 Building for Production
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
+#### Generate a Release APK (Android)
+To build a standalone signed release APK for testing, run:
 ```sh
-bundle install
+cd android && ./gradlew assembleRelease
 ```
+The output file will be saved at `android/app/build/outputs/apk/release/app-release.apk`.
 
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+# gameflow
